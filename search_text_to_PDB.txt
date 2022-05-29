@@ -1,0 +1,21 @@
+from IPython.display import HTML
+from pypdb import *
+import itertools
+import pandas as pd
+
+df = pd.read_excel (r'C:\Users\saySa\OneDrive\Desktop\protein_complexes_data.xlsx')
+print (df)
+
+
+
+list_of_queries = df.values.tolist()
+flat_list = list(itertools.chain(*list_of_queries))
+pdb_id_list = []
+#-- 
+for i in flat_list:
+    temp1 = Query(i).search()
+    temp2 = temp1[:1]
+    print(temp2)
+    
+    
+    
