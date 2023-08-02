@@ -1,6 +1,8 @@
 import os
 import pandas as pd
 from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 os.chdir(r"C:\Users\saySa\OneDrive\Desktop\task_1\sequences_19")
 
 
@@ -23,13 +25,28 @@ def extract_domains(fasta_file):
         ABD_sequences.append(str(record.seq[ABD_start-1:ABD_end]))
         FADBD_sequences.append(str(record.seq[FADBD_start-1:FADBD_end]))
 
-    #-- Store
+    #-- Store in DataFrame
     ABD_df = pd.DataFrame({'SL': range(1, 20), 'ABD_Sequences': ABD_sequences})
     FADBD_df = pd.DataFrame({'SL': range(1, 20), 'FADBD_Sequences': FADBD_sequences})
 
     return ABD_df, FADBD_df
 
+
+
+def write_to_fasta(df, column_name, file_name):
+    sequences = []
+    for index, row in df.iterrows():
+        seq = Seq(row[column_name])
+        seq_record = SeqRecord(seq, id=f"SL_{row['SL']}", description="")
+        sequences.append(seq_record)
+
+    with open(file_name, "w") as output_file:
+        SeqIO.write(sequences, output_file, "fasta")
+
 fasta_file = 'sequences_19.fasta'
 ABD_df, FADBD_df = extract_domains(fasta_file)
-print(ABD_df)
-print(FADBD_df)
+
+
+#-- Write to FASTA files
+write_to_fasta(ABD_df, 'ABD_Sequences', 'ABD_sequences.fasta')
+write_to_fasta(FADBD_df, 'FADBD_Sequences', 'FADBD_sequences.fasta')
