@@ -192,6 +192,12 @@ def plot_domain_network(file, ABD_range, FADBD_range):
     ax.set_title(os.path.basename(file))
     plt.show()
 
+
+    output_filename = f"{os.path.basename(file).split('.')[0]}_network.tiff"
+    fig.savefig(output_filename, dpi=300, format='tiff')
+    print(f"Saved plot as: {output_filename}")
+    plt.close(fig)
+    
 ############################ PLOT ##################################
 
 #-- Plotting for each protein structure manually
